@@ -11,15 +11,15 @@ export default function CurrencyFilter(props) {
   const { filters, setFilters } = props;
   const [ordering, setOrdering] = React.useState("");
 
-  function handleOrderingsChange(event) {
-    setOrdering(event.target.value);
-    setFilters({ ...filters, order: event.target.value });
+  function handleOrderingsChange(e) {
+    setOrdering(e.target.value);
+    setFilters({ ...filters, order: e.target.value });
   }
 
-  function handleFilterChange(c) {
+  function handleCurrencyFilterChange(currency) {
     setFilters({
       ...filters,
-      currency: c,
+      currency: currency,
     });
   }
   return (
@@ -44,7 +44,7 @@ export default function CurrencyFilter(props) {
         <CurrencyFilters>
           <li>
             <CurrencyButton
-              onClick={() => handleFilterChange("")}
+              onClick={() => handleCurrencyFilterChange("")}
               currencyFilter={filters.currency}
               name=""
             >
@@ -53,7 +53,7 @@ export default function CurrencyFilter(props) {
           </li>
           <li>
             <CurrencyButton
-              onClick={() => handleFilterChange("HUF")}
+              onClick={() => handleCurrencyFilterChange("HUF")}
               currencyFilter={filters.currency}
               name="HUF"
             >
@@ -62,7 +62,7 @@ export default function CurrencyFilter(props) {
           </li>
           <li>
             <CurrencyButton
-              onClick={() => handleFilterChange("USD")}
+              onClick={() => handleCurrencyFilterChange("USD")}
               currencyFilter={filters.currency}
               name="USD"
             >

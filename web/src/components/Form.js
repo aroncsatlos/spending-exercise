@@ -8,15 +8,17 @@ export default function Form(props) {
   const { apiUrl } = useApiContext();
   const { setErrorMessage, updateList } = props;
 
-  const [state, setState] = useState({
+  const initState = {
     description: "",
     amount: 0,
     currency: "USD",
-  });
+  };
+
+  const [formdata, setFormdata] = useState(initState);
 
   function handleSubmit(e) {
     e.preventDefault();
-    if (!state.description || !state.amount) {
+    if (!formdata.description || !formdata.amount) {
       alert("Please fill in all fields");
       return;
     }
@@ -25,7 +27,7 @@ export default function Form(props) {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(state),
+      body: JSON.stringify(formdata),
     })
       .then((res) => {
         return res.json();
@@ -36,11 +38,7 @@ export default function Form(props) {
           setErrorMessage(response.error);
         } else {
           setErrorMessage("");
-          setState({
-            description: "",
-            amount: 0,
-            currency: "USD",
-          });
+          setFormdata(initState);
           updateList();
         }
         return;
@@ -51,8 +49,8 @@ export default function Form(props) {
   function handleChange(e) {
     const { name, value } = e.target;
 
-    setState({
-      ...state,
+    setFormdata({
+      ...formdata,
       [name]: value,
     });
   }
@@ -64,19 +62,19 @@ export default function Form(props) {
           type="text"
           placeholder="description"
           name="description"
-          value={state.description}
+          value={formdata.description}
           onChange={handleChange}
         />
         <InputStyles
           type="number"
           placeholder="amount"
           name="amount"
-          value={state.amount}
+          value={formdata.amount}
           onChange={handleChange}
         />
         <SelectStyles
           name="currency"
-          value={state.currency}
+          value={formdata.currency}
           onChange={handleChange}
         >
           <option value="HUF">HUF</option>

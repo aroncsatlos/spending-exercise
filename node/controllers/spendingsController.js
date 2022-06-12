@@ -21,7 +21,7 @@ exports.getSpendings = async (req, res) => {
   res.status(200).send(spendings);
 };
 
-exports.postSpending = (req, res) => {
+exports.postSpending = async (req, res) => {
   const spending = req.body;
   if (!isValidSpending(spending)) {
     res.status(500).send({
@@ -31,9 +31,9 @@ exports.postSpending = (req, res) => {
   }
   spending.spent_at = new Date().toISOString();
   spending.amount = Number(spending.amount);
-  Spending.create(spending).then(() => {
-    res.status(201).send(spending);
-  });
+  await Spending.create(spending);
+  // TODO: send back the created spending, with the id
+  res.status(201).send(spending);
 };
 
 const isValidSpending = (spending) => {
