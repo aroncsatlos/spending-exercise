@@ -1,7 +1,9 @@
 const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
+const sequelize = require("./db");
 
+sequelize.sync().then(() => console.log("Database synced"));
 const app = express();
 const port = process.env.PORT || 5001;
 app.use(cors());

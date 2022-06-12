@@ -1,25 +1,24 @@
-const spendings = [];
+const Spending = require("../models/spending");
 
 const validCurrencies = ["HUF", "USD"];
 
-exports.getSpendings = (req, res) => {
+exports.getSpendings = async (req, res) => {
   const { currency, orderBy, orderDirection } = req.query;
-  const filteredSpendings = spendings.filter((spending) => {
-    if (currency) {
-      return spending.currency === currency;
-    }
-    return true;
-  });
-  let filteredOrderedSpendings = filteredSpendings;
-  if (orderBy && orderDirection) {
-    filteredOrderedSpendings = filteredSpendings.sort((a, b) => {
-      if (orderDirection === "asc") {
-        return a[orderBy] - b[orderBy];
-      }
-      return b[orderBy] - a[orderBy];
-    });
+  const where = {};
+  if (currency) {
+    where.currency = currency;
   }
-  res.status(200).send(filteredOrderedSpendings);
+  const order = [];
+  if (orderBy) {
+    order.push([orderBy, orderDirection || "ASC"]);
+  }
+  const spendings = await Spending.findAll({
+    where: {
+      ...where,
+    },
+    order: order,
+  });
+  res.status(200).send(spendings);
 };
 
 exports.postSpending = (req, res) => {
@@ -31,10 +30,10 @@ exports.postSpending = (req, res) => {
     return;
   }
   spending.spent_at = new Date().toISOString();
-  spending.id = spendings.length + 1;
   spending.amount = Number(spending.amount);
-  spendings.push(spending);
-  res.status(201).send(spending);
+  Spending.create(spending).then(() => {
+    res.status(201).send(spending);
+  });
 };
 
 const isValidSpending = (spending) => {

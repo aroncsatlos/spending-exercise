@@ -27,10 +27,10 @@ export default function CurrencyFilter(props) {
       <FiltersWrapper>
         <Orderings>
           <select onChange={handleOrderingsChange} value={ordering}>
-            <option value="orderBy=date&orderDirection=desc">
+            <option value="orderBy=spent_at&orderDirection=desc">
               Sort by Date descending (default)
             </option>
-            <option value="orderBy=date&orderDirection=asc">
+            <option value="orderBy=spent_at&orderDirection=asc">
               Sort by Date ascending
             </option>
             <option value="orderBy=amount&orderDirection=desc">
