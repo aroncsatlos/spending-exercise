@@ -10,14 +10,28 @@ import {
   Amount,
   AmountWrapper,
 } from "../styles/ComponentStyles";
+import { useApiContext } from "../contexts/ContextProvider";
 
-export default function SpendingList({ spendings, setSpendings }) {
+export default function SpendingList({
+  updateList,
+  filters,
+  spendings,
+  setSpendings,
+}) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+  const { apiUrl } = useApiContext();
 
   useEffect(() => {
     setLoading(true);
-    fetch(`http://localhost:5000/spendings`, {
+    let filterSuffix = "?";
+    if (filters.currency) {
+      filterSuffix += `&currency=${filters.currency}`;
+    }
+    if (filters.order) {
+      filterSuffix += `&${filters.order}`;
+    }
+    fetch(`${apiUrl}/spendings${filterSuffix}`, {
       method: "GET",
       headers: { "Content-Type": "application/json" },
     })
@@ -40,7 +54,7 @@ export default function SpendingList({ spendings, setSpendings }) {
       .finally(() => {
         setLoading(false);
       });
-  }, []);
+  }, [filters, updateList]);
 
   if (loading) return <Loader />;
 
@@ -76,7 +90,9 @@ export default function SpendingList({ spendings, setSpendings }) {
             </TextWrapper>
             <AmountWrapper>
               <Amount currency={spending.currency}>
-                {(spending.amount / 100).toFixed(2)}
+                {spending.currency === "USD"
+                  ? (spending.amount / 100).toFixed(2)
+                  : spending.amount}
               </Amount>
             </AmountWrapper>
           </Spending>
