@@ -3,18 +3,14 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 
 const app = express();
+const port = process.env.PORT || 5001;
 app.use(cors());
 app.use(bodyParser.json());
 
-app.get("/spendings", (req, res) => {
-  res.send([
-    {
-      description: "Mango",
-      amount: 1200,
-      spent_at: new Date().toISOString(),
-      currency: "USD",
-    },
-  ]);
-});
+require("./routes/index")(app);
+
+if (process.env.NODE_ENV !== "test") {
+  app.listen(port, () => console.log(`Listening on port ${port}`));
+}
 
 module.exports = app;

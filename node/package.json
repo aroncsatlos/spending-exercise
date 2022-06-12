@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node -e \"require('./app').listen(5000);\"",
-    "test": "jest"
+    "test": "NODE_ENV=test jest --watchAll"
   },
   "author": "Polygence",
   "license": "ISC",
@@ -15,5 +15,8 @@
     "express": "^4.17.3",
     "jest": "^27.5.1",
     "supertest": "^6.2.2"
+  },
+  "devDependencies": {
+    "jest-sorted": "^1.0.14"
   }
 }
