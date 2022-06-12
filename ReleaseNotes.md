@@ -7,6 +7,7 @@
 - show error if any field is missing (REQ-2)
 - order by date and amount (REQ-3)
 - filter by currency of show all spendings (REQ-4)
+- SQL database added (REQ-nice-to-have)
 
 ## Miscellaneous
 
